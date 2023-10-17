@@ -1,11 +1,15 @@
-const dbConfig = require("../config/db.config.js");
+import mongoose from "mongoose";
+import Role from "./role.model.js";
+import Tutorial from "./tutorial.model.js";
+import User from "./user.model.js";
 
-const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-
 const db = {};
 db.mongoose = mongoose;
-db.url = dbConfig.url;
-db.tutorials = require("./tutorial.model.js")(mongoose);
+// db.tutorial = Tutorial;
+db.user = User;
+db.role = Role;
 
-module.exports = db;
+db.ROLES = ["user", "admin", "moderator"];
+
+export default db;

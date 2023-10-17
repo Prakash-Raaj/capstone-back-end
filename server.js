@@ -1,60 +1,82 @@
-const express = require('express');
-const cors = require('cors');
-// const mongoose = require("mongoose");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import db from "./app/models/index.js";
+import { tutorialRouter } from "./app/routes/turorial.routes.js";
+import { authRouter } from "./app/routes/auth.routes.js";
+import { userRouter } from "./app/routes/user.routes.js";
 
 const app = express();
 
+dotenv.config();
 var corsOptions = {
-  // origin: 'http://localhost:8081',
-  origin: 'http://localhost:3000',
+  origin: "http://localhost:3000",
 };
-
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
 app.use(express.json());
-
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-
-const db = require('./app/models');
+const MONGO_URL = process.env.MONGO_URL;
 
 db.mongoose
-  .connect(db.url, {
+  .connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('Connected to the database!');
+    console.log("Connected to the database!");
+    initial();
   })
   .catch((err) => {
-    console.log('Cannot connect to the database!', err);
+    console.log("Cannot connect to the database!", err);
     process.exit();
   });
 
-var Sample = db.mongoose.model('Sample', {
-  name: String,
-});
+const Role = db.role;
 
 // simple route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to capstone backend application.' });
+app.get("/", (req, res) => {
+  console.log("I am receiving");
+  console.log(db);
+
+  res.json({ message: "Welcome to application." });
 });
 
-app.post('/db', (req, res) => {
-  var name = req.body.textValue;
-  console.log('check the name', name);
-  var sampleData = new Sample({ name });
-  sampleData.save().then(function () {
-    console.log('Data saved to database');
-  });
-  res.send('Data saved to database');
-});
+app.use("/tutorial", tutorialRouter);
+app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
-require('./app/routes/turorial.routes')(app);
+// require("./app/routes/turorial.routes")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`Server is up and running on port ${PORT}.`);
 });
+
+function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "user",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to role collection");
+      });
+
+      new Role({
+        name: "admin",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'admin' to role collection");
+      });
+    }
+  });
+}
