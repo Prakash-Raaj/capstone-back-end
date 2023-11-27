@@ -5,6 +5,11 @@ import db from "./app/models/index.js";
 import { tutorialRouter } from "./app/routes/turorial.routes.js";
 import { authRouter } from "./app/routes/auth.routes.js";
 import { userRouter } from "./app/routes/user.routes.js";
+import { productRouter } from "./app/routes/product.routes.js";
+import { addressRouter } from "./app/routes/address.routes.js";
+import { wishlistRouter } from "./app/routes/wishlist.routes.js";
+import { reviewRouter } from "./app/routes/review.routes.js";
+import { cartRouter } from "./app/routes/cart.routes.js";
 
 const app = express();
 
@@ -37,15 +42,17 @@ const Role = db.role;
 
 // simple route
 app.get("/", (req, res) => {
-  console.log("I am receiving");
-  console.log(db);
-
   res.json({ message: "Welcome to application." });
 });
 
 app.use("/tutorial", tutorialRouter);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/product", productRouter);
+app.use("/review", reviewRouter);
+app.use("/cart", cartRouter);
+app.use("/wishlist", wishlistRouter);
+app.use("/address", addressRouter);
 
 // require("./app/routes/turorial.routes")(app);
 

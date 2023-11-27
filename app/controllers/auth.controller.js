@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import db from "../models/index.js";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import db from '../models/index.js';
 
 const User = db.user;
 const Role = db.role;
@@ -36,12 +36,14 @@ export const signup = (req, res) => {
               return;
             }
 
-            res.send({ message: "User was registered successfully!" });
+            res.send({
+              message: 'User was registered successfully!',
+            });
           });
         }
       );
     } else {
-      Role.findOne({ name: "user" }, (err, role) => {
+      Role.findOne({ name: 'user' }, (err, role) => {
         if (err) {
           res.status(500).send({ message: err });
           return;
@@ -54,7 +56,7 @@ export const signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          res.send({ message: 'User was registered successfully!' });
         });
       });
     }
@@ -65,7 +67,7 @@ export const signin = (req, res) => {
   User.findOne({
     username: req.body.username,
   })
-    .populate("roles", "-__v")
+    .populate('roles', '-__v')
     .exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -73,7 +75,7 @@ export const signin = (req, res) => {
       }
 
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: 'User Not found.' });
       }
 
       const passwordIsValid = bcrypt.compareSync(
@@ -84,12 +86,12 @@ export const signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!",
+          message: 'Invalid Password!',
         });
       }
 
       const token = jwt.sign({ id: user.id }, process.env.SECRET, {
-        algorithm: "HS256",
+        algorithm: 'HS256',
         allowInsecureKeySizes: true,
         expiresIn: 86400, // 24 hours
       });
