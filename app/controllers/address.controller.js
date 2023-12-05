@@ -1,11 +1,18 @@
-import db from "../models/index.js";
+import db from '../models/index.js';
 
 const Address = db.address;
 
 export const createAddress = async (req, res) => {
   try {
-    const { userId, street, city, state, postalCode, country, isDefault } =
-      req.body;
+    const {
+      userId,
+      street,
+      city,
+      state,
+      postalCode,
+      country,
+      isDefault,
+    } = req.body;
 
     const newAddress = new Address({
       userId: userId,
@@ -22,7 +29,8 @@ export const createAddress = async (req, res) => {
     res.status(201).send(savedAddress);
   } catch (err) {
     res.status(500).send({
-      message: err.message || "Error occurred while creating an address.",
+      message:
+        err.message || 'Error occurred while creating an address.',
     });
   }
 };
@@ -30,13 +38,14 @@ export const createAddress = async (req, res) => {
 export const getAddressesByUserId = async (req, res) => {
   try {
     const userId = req.query.userId;
-    console.log(userId);
+    // console.log(userId);
     const addresses = await Address.find({ userId: userId });
 
     res.send(addresses);
   } catch (err) {
     res.status(500).send({
-      message: err.message || "Error occurred while retrieving addresses.",
+      message:
+        err.message || 'Error occurred while retrieving addresses.',
     });
   }
 };
@@ -45,7 +54,7 @@ export const updateAddressById = async (req, res) => {
   try {
     const addressId = req.params.id;
     const updateFields = req.body;
-    console.log(addressId, "This is my ID");
+    console.log(addressId, 'This is my ID');
 
     const updatedAddress = await Address.findByIdAndUpdate(
       addressId,
@@ -55,14 +64,15 @@ export const updateAddressById = async (req, res) => {
 
     if (!updatedAddress) {
       return res.status(404).send({
-        message: "Address not found for update.",
+        message: 'Address not found for update.',
       });
     }
 
     res.send(updatedAddress);
   } catch (err) {
     res.status(500).send({
-      message: err.message || "Error occurred while updating an address.",
+      message:
+        err.message || 'Error occurred while updating an address.',
     });
   }
 };
@@ -75,14 +85,15 @@ export const deleteAddressById = async (req, res) => {
 
     if (!deletedAddress) {
       return res.status(404).send({
-        message: "Address not found for deletion.",
+        message: 'Address not found for deletion.',
       });
     }
 
-    res.send({ message: "Address deleted successfully!" });
+    res.send({ message: 'Address deleted successfully!' });
   } catch (err) {
     res.status(500).send({
-      message: err.message || "Error occurred while deleting an address.",
+      message:
+        err.message || 'Error occurred while deleting an address.',
     });
   }
 };

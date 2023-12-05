@@ -10,6 +10,7 @@ import { addressRouter } from "./app/routes/address.routes.js";
 import { wishlistRouter } from "./app/routes/wishlist.routes.js";
 import { reviewRouter } from "./app/routes/review.routes.js";
 import { cartRouter } from "./app/routes/cart.routes.js";
+import { orderRouter } from "./app/routes/order.routes.js";
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use("/review", reviewRouter);
 app.use("/cart", cartRouter);
 app.use("/wishlist", wishlistRouter);
 app.use("/address", addressRouter);
+app.use('/order',orderRouter);
 
 // require("./app/routes/turorial.routes")(app);
 
