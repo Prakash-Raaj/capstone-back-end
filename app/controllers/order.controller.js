@@ -11,12 +11,16 @@ export const create = async (req, res) => {
     //   return;
     // }
 
-    const { userId, orders } = req.body;
+    const { userId, orders, promoCode, deliveryType, totalAmount } =
+      req.body;
 
     // Create a order
     const order = new Order({
       userId: userId,
       orders: orders,
+      promoCode: promoCode,
+      deliveryType: deliveryType,
+      totalAmount: totalAmount,
     });
 
     // Save order in the database
@@ -33,7 +37,6 @@ export const create = async (req, res) => {
 
 // Retrieve all orders from the database.
 export const findAll = async (req, res) => {
- 
   try {
     // console.log('TESTING', db.order);
     const userId = req.query.userId;

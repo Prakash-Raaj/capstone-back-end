@@ -6,6 +6,18 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    promoCode: {
+      type: String,
+      required: false,
+    },
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    deliveryType:{
+      type:String,
+      required:true
+    },
     orders: [
       {
         userId: {
